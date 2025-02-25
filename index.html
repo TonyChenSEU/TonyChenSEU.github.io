@@ -44,15 +44,17 @@
             //         contentType: 'video/mp4;codecs="avc1.42c01f"'
             //     }]
             // }]);
-            const access = await navigator.requestMediaKeySystemAccess(WISEPLAY_KEY_SYSTEM, [{
+            const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(WISEPLAY_KEY_SYSTEM, [{
                 initDataTypes: ['cenc'],
                 videoCapabilities: [{
                     contentType: 'video/mp4;codecs="avc1.42c01f"'
                 }]
             }]);
+            console.log(mediaKeyAccess);
 
             // 创建 MediaKeys
-            const mediaKeys = await access.createMediaKeys();
+            const mediaKeys = await mediaKeyAccess.createMediaKeys();
+            console.log(mediaKeys);
             await videoElement.setMediaKeys(mediaKeys);
 
             // 初始化 hls.js
@@ -82,12 +84,13 @@
 
         try {
             // 请求 MediaKeySystemAccess
-            const access = await navigator.requestMediaKeySystemAccess(WIDEVINE_KEY_SYSTEM, [{
+            const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(WIDEVINE_KEY_SYSTEM, [{
                 initDataTypes: ['cenc'],
                 videoCapabilities: [{
                     contentType: 'video/mp4;codecs="avc1.42c01f"'
                 }]
             }]);
+            console.log(mediaKeyAccess);
             // 初始化 hls.js
             const hls = new Hls({
                 emeEnabled: true,
@@ -98,6 +101,11 @@
                 }
             });
 
+            // 创建 MediaKeys
+            const mediaKeys = await mediaKeyAccess.createMediaKeys();
+            console.log(mediaKeys);
+            await videoElement.setMediaKeys(mediaKeys);
+
             hls.loadSource('https://cdn.bitmovin.com/content/assets/art-of-motion_drm/m3u8s/11331.m3u8');
             hls.attachMedia(videoElement);
 
@@ -106,9 +114,7 @@
             });
 
 
-            // // 创建 MediaKeys
-            // const mediaKeys = await access.createMediaKeys();
-            // await videoElement.setMediaKeys(mediaKeys);
+
             //
             // // 初始化 dash.js
             // const player = dashjs.MediaPlayer().create();
@@ -139,15 +145,17 @@
             //         contentType: 'video/mp4;codecs="avc1.42c01f"'
             //     }]
             // }]);
-            const access = await navigator.requestMediaKeySystemAccess(PLAYREADY_KEY_SYSTEM, [{
+            const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(PLAYREADY_KEY_SYSTEM, [{
                 initDataTypes: ['cenc'],
                 videoCapabilities: [{
                     contentType: 'video/mp4;codecs="avc1.42c01f"'
                 }]
             }]);
+            console.log(mediaKeyAccess);
 
             // 创建 MediaKeys
-            const mediaKeys = await access.createMediaKeys();
+            const mediaKeys = await mediaKeyAccess.createMediaKeys();
+            console.log(mediaKeys);
             await videoElement.setMediaKeys(mediaKeys);
 
             // 初始化 hls.js
