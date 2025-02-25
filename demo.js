@@ -15,6 +15,9 @@ var source = {
     },
     playready: {
       LA_URL: 'https://test.playready.microsoft.com/service/rightsmanager.asmx?PlayRight=1&ContentKey=EAtsIJQPd5pFiRUrV9Layw=='
+    },
+    wiseplay:{
+      LA_URL:'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1'
     }
   }
 };
