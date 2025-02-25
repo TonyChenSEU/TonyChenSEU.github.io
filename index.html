@@ -56,6 +56,8 @@
             const mediaKeys = await mediaKeyAccess.createMediaKeys();
             console.log(mediaKeys);
             await videoElement.setMediaKeys(mediaKeys);
+            const mediaKeysSession = mediaKeys.createSession();
+            console.log(mediaKeysSession);
 
             // 初始化 hls.js
             const hls = new Hls({
@@ -96,7 +98,7 @@
                 emeEnabled: true,
                 drmSystemOptions: {
                     [WISEPLAY_KEY_SYSTEM]: {
-                        licenseUrl: PLAYREADY_LICENSE_URL
+                        licenseUrl: WIDEVINE_LICENSE_URL
                     }
                 }
             });
@@ -105,6 +107,8 @@
             const mediaKeys = await mediaKeyAccess.createMediaKeys();
             console.log(mediaKeys);
             await videoElement.setMediaKeys(mediaKeys);
+            const mediaKeysSession = mediaKeys.createSession();
+            console.log(mediaKeysSession);
 
             hls.loadSource('https://cdn.bitmovin.com/content/assets/art-of-motion_drm/m3u8s/11331.m3u8');
             hls.attachMedia(videoElement);
@@ -157,6 +161,8 @@
             const mediaKeys = await mediaKeyAccess.createMediaKeys();
             console.log(mediaKeys);
             await videoElement.setMediaKeys(mediaKeys);
+            const mediaKeysSession = mediaKeys.createSession();
+            console.log(mediaKeysSession);
 
             // 初始化 hls.js
             const hls = new Hls({
