@@ -5,7 +5,7 @@
     <title>DRM 演示</title>
     <!-- 引入 dash.js 和 hls.js -->
     <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/hls.js/1.4.0/hls.min.js"></script>
 </head>
 <body>
 <div style="margin: 20px;">
@@ -25,7 +25,7 @@
 
 <script>
     // 公共配置
-    const WISEPLAY_KEY_SYSTEM = 'com.wiseplay.drmy';
+    const WISEPLAY_KEY_SYSTEM = 'com.wiseplay.drm';
     const WIDEVINE_KEY_SYSTEM = 'com.widevine.alpha';
     const PLAYREADY_KEY_SYSTEM = 'com.microsoft.playready';
     const WISEPLAY_LICENSE_URL = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1';
