@@ -6,21 +6,47 @@
     <!-- 引入 dash.js 和 hls.js -->
     <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/hls.js/1.4.0/hls.min.js"></script>
+    <style>
+        .error-message {
+            color: #ff4444;
+            background: #ffeeee;
+            border: 2px solid #ffaaaa;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .player-container {
+            position: relative;
+            min-height: 450px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <div style="margin: 20px;">
-    <h3>WISEPLAY player</h3>
-    <video id="wiseplayPlayer" controls width="800"></video>
+    <h3>WISEPLAY HLS player</h3>
+    <video id="wiseplayHlsPlayer" controls width="600"></video>
+    <div id="wiseplayHlsPlayerError" class="error-message hidden"> wiseplay 初始化失败</div>
 </div>
 <div style="margin: 20px;">
-    <h3>WIDEVINE player</h3>
-    <video id="widevinePlayer" controls width="800"></video>
+    <h3>WISEPLAY DASH player</h3>
+    <video id="wiseplayDashPlayer" controls width="600"></video>
+    <div id="wiseplayDashPlayerError" class="error-message hidden">wiseplay 初始化失败</div>
+</div>
+<div style="margin: 20px;">
+    <h3>WIDEVINE HLS player</h3>
+    <video id="widevinePlayer" controls width="400"></video>
+    <div id="widevinePlayerError" class="error-message hidden">widevine 初始化失败</div>
 </div>
 
 
 <div style="margin: 20px;">
-    <h3>PLAYREADY player</h3>
-    <video id="playreadyPlayer" controls width="800"></video>
+    <h3>PLAYREADY HLS player</h3>
+    <video id="playreadyPlayer" controls width="400"></video>
+    <div id="playreadyPlayerError" class="error-message hidden">playready 初始化失败</div>
 </div>
 
 <script>
@@ -31,19 +57,16 @@
     const WISEPLAY_LICENSE_URL = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1';
     const WIDEVINE_LICENSE_URL = 'https://cwip-shaka-proxy.appspot.com/no_auth';
     const PLAYREADY_LICENSE_URL = 'https://test.playready.microsoft.com/service/rightsmanager.asmx?PlayRight=1&ContentKey=EAtsIJQPd5pFiRUrV9Layw==';
+    const WISPLAY_DASH_URL = 'https://hwposter-inland.hwcloudtest.cn/rem/ruanjie/h265_480x270_0.2m_30fp_cenc/dash.mpd';
 
     // 初始化 HLS 播放器
-    async function initializeWiseplayPlayer() {
-        const videoElement = document.getElementById('wiseplayPlayer');
+    async function initializeWiseplayHlsPlayer() {
+        const videoElement = document.getElementById('wiseplayHlsPlayer');
+        const errorDiv = document.getElementById('wiseplayHlsPlayerError');
 
         try {
             // 请求 MediaKeySystemAccess
-            // const access = await navigator.requestMediaKeySystemAccess(WISEPLAY_KEY_SYSTEM, [{
-            //     initDataTypes: ['cenc'],
-            //     videoCapabilities: [{
-            //         contentType: 'video/mp4;codecs="avc1.42c01f"'
-            //     }]
-            // }]);
+
             const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(WISEPLAY_KEY_SYSTEM, [{
                 initDataTypes: ['cenc'],
                 videoCapabilities: [{
@@ -75,15 +98,72 @@
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
                 videoElement.play();
             });
+            errorDiv.classList.add('hidden');
+            videoElement.classList.remove('hidden');
         } catch (error) {
-            console.error('wiseplay fail:', error);
+            console.info('wiseplay fail:', error);
+            errorDiv.innerHTML = `初始化失败: ${error.message}`;
+            errorDiv.classList.remove('hidden');
+            videoElement.classList.add('hidden');
+        }
+    }
+
+    // 初始化 DASH 播放器
+    async function initializeWiseplayDashPlayer() {
+        const videoElement = document.getElementById('wiseplayDashPlayer');
+        const errorDiv = document.getElementById('wiseplayDashPlayerError');
+        try {
+            // 请求 MediaKeySystemAccess
+            const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(WISEPLAY_KEY_SYSTEM, [{
+                initDataTypes: ['cenc'],
+                videoCapabilities: [{
+                    contentType: 'video/mp4;codecs="avc1.42c01f"'
+                }]
+            }]);
+            console.log(mediaKeyAccess);
+            // 初始化 hls.js
+            const hls = new Hls({
+                emeEnabled: true,
+                drmSystemOptions: {
+                    [WISEPLAY_KEY_SYSTEM]: {
+                        licenseUrl: WIDEVINE_LICENSE_URL
+                    }
+                }
+            });
+
+            // 创建 MediaKeys
+            const mediaKeys = await mediaKeyAccess.createMediaKeys();
+            console.log(mediaKeys);
+            await videoElement.setMediaKeys(mediaKeys);
+            const mediaKeysSession = mediaKeys.createSession();
+            console.log(mediaKeysSession);
+
+
+            //
+            // 初始化 dash.js
+            const player = dashjs.MediaPlayer().create();
+            player.initialize(videoElement, WISPLAY_DASH_URL, true);
+
+            // 配置 DRM
+            player.setProtectionData({
+                [WISEPLAY_KEY_SYSTEM]: {
+                    serverURL: WISEPLAY_LICENSE_URL
+                }
+            });
+            errorDiv.classList.add('hidden');
+            videoElement.classList.remove('hidden');
+        } catch (error) {
+            console.info('wiseplay fail:', error);
+            errorDiv.innerHTML = `初始化失败: ${error.message}`;
+            errorDiv.classList.remove('hidden');
+            videoElement.classList.add('hidden');
         }
     }
 
     // 初始化 DASH 播放器
     async function initializeWidevinePlayer() {
         const videoElement = document.getElementById('widevinePlayer');
-
+        const errorDiv = document.getElementById('widevinePlayerError');
         try {
             // 请求 MediaKeySystemAccess
             const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(WIDEVINE_KEY_SYSTEM, [{
@@ -130,8 +210,13 @@
             //         serverURL: WIDEVINE_LICENSE_URL
             //     }
             // });
+            errorDiv.classList.add('hidden');
+            videoElement.classList.remove('hidden');
         } catch (error) {
-            console.error('widevine fail:', error);
+            console.info('widevine fail:', error);
+            errorDiv.innerHTML = `初始化失败: ${error.message}`;
+            errorDiv.classList.remove('hidden');
+            videoElement.classList.add('hidden');
         }
     }
 
@@ -140,15 +225,9 @@
     // 初始化 HLS 播放器
     async function initializePlayreadyPlayer() {
         const videoElement = document.getElementById('playreadyPlayer');
-
+        const errorDiv = document.getElementById('playreadyPlayerError');
         try {
-            // 请求 MediaKeySystemAccess
-            // const access = await navigator.requestMediaKeySystemAccess(WISEPLAY_KEY_SYSTEM, [{
-            //     initDataTypes: ['cenc'],
-            //     videoCapabilities: [{
-            //         contentType: 'video/mp4;codecs="avc1.42c01f"'
-            //     }]
-            // }]);
+
             const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(PLAYREADY_KEY_SYSTEM, [{
                 initDataTypes: ['cenc'],
                 videoCapabilities: [{
@@ -180,14 +259,20 @@
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
                 videoElement.play();
             });
+            errorDiv.classList.add('hidden');
+            videoElement.classList.remove('hidden');
         } catch (error) {
-            console.error('playready fail:', error);
+            console.info('playread fail:', error);
+            errorDiv.innerHTML = `初始化失败: ${error.message}`;
+            errorDiv.classList.remove('hidden');
+            videoElement.classList.add('hidden');
         }
     }
 
     // 页面加载完成后初始化播放器
     window.addEventListener('DOMContentLoaded', () => {
-        initializeWiseplayPlayer();
+        initializeWiseplayHlsPlayer();
+        initializeWiseplayDashPlayer();
         initializeWidevinePlayer();
         initializePlayreadyPlayer();
     });
