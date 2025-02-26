@@ -37,7 +37,7 @@
     <div id="wiseplayDashPlayerError" class="error-message hidden">wiseplay 初始化失败</div>
 </div>
 <div style="margin: 20px;">
-    <h3>WIDEVINE HLS player</h3>
+    <h3>WIDEVINE DASH player</h3>
     <video id="widevinePlayer" controls width="400"></video>
     <div id="widevinePlayerError" class="error-message hidden">widevine 初始化失败</div>
 </div>
@@ -58,6 +58,7 @@
     const WIDEVINE_LICENSE_URL = 'https://cwip-shaka-proxy.appspot.com/no_auth';
     const PLAYREADY_LICENSE_URL = 'https://test.playready.microsoft.com/service/rightsmanager.asmx?PlayRight=1&ContentKey=EAtsIJQPd5pFiRUrV9Layw==';
     const WISPLAY_DASH_URL = 'https://hwposter-inland.hwcloudtest.cn/rem/ruanjie/h265_480x270_0.2m_30fp_cenc/dash.mpd';
+    const DASH_URL = 'https://cdn.bitmovin.com/content/assets/art-of-motion_drm/mpds/11331.mpd';
 
     // 初始化 HLS 播放器
     async function initializeWiseplayHlsPlayer() {
@@ -113,43 +114,129 @@
         const videoElement = document.getElementById('wiseplayDashPlayer');
         const errorDiv = document.getElementById('wiseplayDashPlayerError');
         try {
+
+            const mediaKeyConfig = [{
+                initDataTypes: ['cenc', 'keyids'],
+                videoCapabilities: [
+                    { contentType: 'video/mp4;codecs="avc1.42c01f"' },
+                    { contentType: 'video/webm;codecs="vp9"' }
+                ],
+                audioCapabilities: [
+                    { contentType: 'audio/mp4;codecs="mp4a.40.2"' }
+                ],
+                persistentState: 'optional',
+                distinctiveIdentifier: 'optional'
+            }];
+
             // 请求 MediaKeySystemAccess
-            const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(WISEPLAY_KEY_SYSTEM, [{
-                initDataTypes: ['cenc'],
-                videoCapabilities: [{
-                    contentType: 'video/mp4;codecs="avc1.42c01f"'
-                }]
-            }]);
+            const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(WISEPLAY_KEY_SYSTEM,
+                mediaKeyConfig
+            );
+            console.group('mediaKeyAccess配置');
             console.log(mediaKeyAccess);
-            // 初始化 hls.js
-            const hls = new Hls({
-                emeEnabled: true,
-                drmSystemOptions: {
-                    [WISEPLAY_KEY_SYSTEM]: {
-                        licenseUrl: WIDEVINE_LICENSE_URL
-                    }
-                }
-            });
+            console.log(mediaKeyAccess.getConfiguration());
+            console.groupEnd();
 
             // 创建 MediaKeys
-            const mediaKeys = await mediaKeyAccess.createMediaKeys();
-            console.log(mediaKeys);
-            await videoElement.setMediaKeys(mediaKeys);
-            const mediaKeysSession = mediaKeys.createSession();
-            console.log(mediaKeysSession);
+            // const mediaKeys = await mediaKeyAccess.createMediaKeys();
+            // console.log(mediaKeys);
+            // await videoElement.setMediaKeys(mediaKeys);
+            // const mediaKeysSession = mediaKeys.createSession();
+            // console.log(mediaKeysSession);
 
 
             //
             // 初始化 dash.js
             const player = dashjs.MediaPlayer().create();
-            player.initialize(videoElement, WISPLAY_DASH_URL, true);
+            player.updateSettings({
+                streaming: {
+                    drm: {
+                        systems: {
+                            widevine: WISEPLAY_KEY_SYSTEM
+                        },
+                        updateEnabled: true
+                    }
+                }
+            });
+            // player.initialize(videoElement, WISPLAY_DASH_URL, true);
 
             // 配置 DRM
             player.setProtectionData({
-                [WISEPLAY_KEY_SYSTEM]: {
-                    serverURL: WISEPLAY_LICENSE_URL
-                }
+                    [WISEPLAY_KEY_SYSTEM]: {
+                serverURL: WISEPLAY_LICENSE_URL,
+                    httpRequestHeaders: {
+                    'Content-Type': 'application/octet-stream',
+                        'Origin': window.location.origin
+                },
+                withCredentials: false
+            }
             });
+
+            // 5. 初始化播放器
+            player.initialize(videoElement, WISPLAY_DASH_URL, true);
+
+            // 6. 处理加密事件（通过 dash.js 内置机制）
+            player.on(dashjs.MediaPlayer.events.KEY_SESSION_CREATED, (e) => {
+                if(e.data!=null){
+                    console.log('DRM 会话创建:', e.data.session);
+                    // const session = e.data.session;
+
+                }
+
+
+            });
+
+            // 监听会话级事件
+            player.on(dashjs.MediaPlayer.events.KEY_MESSAGE, (msgEvent) => {
+                console.info(`许可证请求`, {
+                    messageType: msgEvent.data.messageType,
+                    // message: new Uint8Array(msgEvent.data),
+                    // destinationURL: session.getServerURL()
+                });
+            });
+
+            player.on(dashjs.MediaPlayer.events.KEY_STATUSES_CHANGED, (e) => {
+                // const statusMap = session.getKeyStatuses();
+                console.log('密钥状态更新');
+                // console.info(`密钥状态更新`,
+                //     Array.from(statusMap).map(([keyId, status]) => ({
+                //         keyId: Array.from(new Uint8Array(keyId)),
+                //         status: status
+                //     }))
+                // );
+            });
+
+            // 7. 播放器准备就绪后触发播放
+            player.on(dashjs.MediaPlayer.events.MANIFEST_LOADED, () => {
+                console.log('媒体清单加载完成');
+            });
+
+            // 8. 错误处理（增强错误分类）
+            player.on(dashjs.MediaPlayer.events.ERROR, (e) => {
+                if (e.error.code === dashjs.MediaPlayer.errors.DRM_KEY_SYSTEM_NOT_SUPPORTED) {
+                    errorDiv.textContent = '浏览器不支持 Widevine DRM';
+                } else if (e.error.code === dashjs.MediaPlayer.errors.DRM_LICENSE_REQUEST_FAILED) {
+                    errorDiv.textContent = '许可证请求失败，请检查网络或认证信息';
+                }
+                console.group('播放器报错');
+                console.log("player error: ");
+                console.log(e.error);
+                console.groupEnd();
+                errorDiv.classList.remove('hidden');
+            });
+
+
+            // 监听媒体加密事件
+            videoElement.addEventListener('encrypted', (event) => {
+                console.group('加密内容检测');
+                console.log('初始化数据类型:', event.initDataType);
+                console.log('初始化数据:', Array.from(new Uint8Array(event.initData)));
+                console.groupEnd();
+
+                // 初始化DRM系统
+                // initDRM(event.initData, event.initDataType).catch(console.error);
+            });
+
             errorDiv.classList.add('hidden');
             videoElement.classList.remove('hidden');
         } catch (error) {
@@ -166,50 +253,140 @@
         const errorDiv = document.getElementById('widevinePlayerError');
         try {
             // 请求 MediaKeySystemAccess
-            const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(WIDEVINE_KEY_SYSTEM, [{
-                initDataTypes: ['cenc'],
-                videoCapabilities: [{
-                    contentType: 'video/mp4;codecs="avc1.42c01f"'
-                }]
-            }]);
-            console.log(mediaKeyAccess);
+            if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+                throw new Error('DRM 需要 HTTPS 或 localhost 环境');
+            }
+
+            // 宽松的 MediaKey 配置
+            const mediaKeyConfig = [{
+                initDataTypes: ['cenc', 'keyids'],
+                videoCapabilities: [
+                    { contentType: 'video/mp4;codecs="avc1.42c01f"' },
+                    { contentType: 'video/webm;codecs="vp9"' }
+                ],
+                audioCapabilities: [
+                    { contentType: 'audio/mp4;codecs="mp4a.40.2"' }
+                ],
+                persistentState: 'optional',
+                distinctiveIdentifier: 'optional'
+            }];
+
+            // 分步调试 KeySystem 访问
+            const mediaKeyAccess = await navigator.requestMediaKeySystemAccess(
+                WIDEVINE_KEY_SYSTEM,
+                mediaKeyConfig
+            );
+            console.group('mediaKeyAccess配置');
+            console.log(mediaKeyAccess.getConfiguration());
+            console.groupEnd();
             // 初始化 hls.js
-            const hls = new Hls({
-                emeEnabled: true,
-                drmSystemOptions: {
-                    [WISEPLAY_KEY_SYSTEM]: {
-                        licenseUrl: WIDEVINE_LICENSE_URL
+
+            // 创建 MediaKeys
+            // const mediaKeys = await mediaKeyAccess.createMediaKeys();
+            // console.log(mediaKeys);
+            // await videoElement.setMediaKeys(mediaKeys);
+            // const mediaKeysSession = mediaKeys.createSession();
+            // console.log(mediaKeysSession);
+
+            // 3. 初始化 dash.js 播放器（优化配置）
+            const player = dashjs.MediaPlayer().create();
+            player.updateSettings({
+                streaming: {
+                    drm: {
+                        systems: {
+                            widevine: WIDEVINE_KEY_SYSTEM
+                        },
+                        updateEnabled: true
                     }
                 }
             });
 
+            // 4. 配置 DRM 参数（带认证头）
+            player.setProtectionData({
+                [WIDEVINE_KEY_SYSTEM]: {
+                    serverURL: WIDEVINE_LICENSE_URL,
+                    httpRequestHeaders: {
+                        'Content-Type': 'application/octet-stream',
+                        'Origin': window.location.origin
+                    },
+                    withCredentials: false
+                }
+            });
+
+            // 5. 初始化播放器（关闭自动播放）
+            player.initialize(
+                videoElement,
+                WISPLAY_DASH_URL,
+                true
+            );
+
+
             // 创建 MediaKeys
-            const mediaKeys = await mediaKeyAccess.createMediaKeys();
-            console.log(mediaKeys);
-            await videoElement.setMediaKeys(mediaKeys);
-            const mediaKeysSession = mediaKeys.createSession();
-            console.log(mediaKeysSession);
+            // const mediaKeys = await mediaKeyAccess.createMediaKeys();
+            // console.log(mediaKeys);
+            // await videoElement.setMediaKeys(mediaKeys);
+            // const mediaKeysSession = mediaKeys.createSession();
+            // console.log(mediaKeysSession);
 
-            hls.loadSource('https://cdn.bitmovin.com/content/assets/art-of-motion_drm/m3u8s/11331.m3u8');
-            hls.attachMedia(videoElement);
+            // 6. 处理加密事件（通过 dash.js 内置机制）
+            player.on(dashjs.MediaPlayer.events.KEY_SESSION_CREATED, (e) => {
+                if(e.data!=null){
+                    console.log('DRM 会话创建:', e.data.session);
+                    // const session = e.data.session;
+                }
+            });
 
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                videoElement.play();
+            // 监听会话级事件
+            player.on(dashjs.MediaPlayer.events.KEY_MESSAGE, (msgEvent) => {
+                console.info(`许可证请求`, {
+                    messageType: msgEvent.data.messageType,
+                    // message: new Uint8Array(msgEvent.data),
+                    // destinationURL: session.getServerURL()
+                });
+            });
+
+            player.on(dashjs.MediaPlayer.events.KEY_STATUSES_CHANGED, (e) => {
+                // const statusMap = session.getKeyStatuses();
+                console.log('密钥状态更新');
+                // console.info(`密钥状态更新`,
+                //     Array.from(statusMap).map(([keyId, status]) => ({
+                //         keyId: Array.from(new Uint8Array(keyId)),
+                //         status: status
+                //     }))
+                // );
+            });
+
+            // 7. 播放器准备就绪后触发播放
+            player.on(dashjs.MediaPlayer.events.MANIFEST_LOADED, () => {
+                console.log('媒体清单加载完成');
+            });
+
+            // 8. 错误处理（增强错误分类）
+            player.on(dashjs.MediaPlayer.events.ERROR, (e) => {
+                if (e.error.code === dashjs.MediaPlayer.errors.DRM_KEY_SYSTEM_NOT_SUPPORTED) {
+                    errorDiv.textContent = '浏览器不支持 Widevine DRM';
+                } else if (e.error.code === dashjs.MediaPlayer.errors.DRM_LICENSE_REQUEST_FAILED) {
+                    errorDiv.textContent = '许可证请求失败，请检查网络或认证信息';
+                }
+                console.group('播放器报错');
+                console.log("player error: ");
+                console.log(e.error);
+                console.groupEnd();
+                // errorDiv.classList.remove('hidden');
             });
 
 
+            // 监听媒体加密事件
+            videoElement.addEventListener('encrypted', (event) => {
+                console.group('加密内容检测');
+                console.log('初始化数据类型:', event.initDataType);
+                console.log('初始化数据:', Array.from(new Uint8Array(event.initData)));
+                console.groupEnd();
 
-            //
-            // // 初始化 dash.js
-            // const player = dashjs.MediaPlayer().create();
-            // player.initialize(videoElement, 'https://cdn.bitmovin.com/content/assets/art-of-motion_drm/mpds/11331.mpd', true);
-            //
-            // // 配置 DRM
-            // player.setProtectionData({
-            //     [WISEPLAY_KEY_SYSTEM]: {
-            //         serverURL: WIDEVINE_LICENSE_URL
-            //     }
-            // });
+                // 初始化DRM系统
+                // initDRM(event.initData, event.initDataType).catch(console.error);
+            });
+
             errorDiv.classList.add('hidden');
             videoElement.classList.remove('hidden');
         } catch (error) {
