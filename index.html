@@ -54,11 +54,17 @@
     const WISEPLAY_KEY_SYSTEM = 'com.wiseplay.drm';
     const WIDEVINE_KEY_SYSTEM = 'com.widevine.alpha';
     const PLAYREADY_KEY_SYSTEM = 'com.microsoft.playready';
+
     const WISEPLAY_LICENSE_URL = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1';
     const WIDEVINE_LICENSE_URL = 'https://cwip-shaka-proxy.appspot.com/no_auth';
     const PLAYREADY_LICENSE_URL = 'https://test.playready.microsoft.com/service/rightsmanager.asmx?PlayRight=1&ContentKey=EAtsIJQPd5pFiRUrV9Layw==';
+
     const WISPLAY_DASH_URL = 'https://hwposter-inland.hwcloudtest.cn/rem/ruanjie/h265_480x270_0.2m_30fp_cenc/dash.mpd';
-    const DASH_URL = 'https://cdn.bitmovin.com/content/assets/art-of-motion_drm/mpds/11331.mpd';
+    // const WIDEVINE_DASH_URL = 'https://cdn.bitmovin.com/content/assets/art-of-motion_drm/mpds/11331.mpd';
+    const WIDEVINE_DASH_URL = 'https://hwposter-inland.hwcloudtest.cn/rem/ruanjie/h265_480x270_0.2m_30fp_cenc/dash.mp';
+
+    const DASH_URL = 'https://hwposter-inland.hwcloudtest.cn/rem/LaunchEvent/DASH_MP4_H265_clear/dash.mpd';
+
 
     // 初始化 HLS 播放器
     async function initializeWiseplayHlsPlayer() {
@@ -316,7 +322,7 @@
             // 5. 初始化播放器（关闭自动播放）
             player.initialize(
                 videoElement,
-                WISPLAY_DASH_URL,
+                WIDEVINE_DASH_URL,
                 true
             );
 
