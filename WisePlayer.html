@@ -1,0 +1,176 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <title>Encrypted Video Player</title>  
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>  
+    <script src="https://cdn.tailwindcss.com"></script>  
+</head>  
+<body class="bg-gray-100 p-8">  
+    <div class="max-w-4xl mx-auto">  
+        <video id="encryptedVideo" controls class="w-full aspect-video bg-black rounded-lg"  
+               crossorigin="anonymous"></video>  
+        
+        <div class="mt-4 p-4 bg-white rounded-lg shadow">  
+            <div class="grid grid-cols-3 gap-4">  
+                <button onclick="initDRM()" class="btn-drm-init">  
+                    Init DRM  
+                </button>  
+                <button onclick="loadEncryptedStream()" class="btn-drm-load">  
+                    Load Stream  
+                </button>  
+                <button onclick="releaseSession()" class="btn-drm-release">  
+                    Release  
+                </button>  
+            </div>  
+            <div id="drmStatus" class="mt-4 p-3 rounded bg-gray-50"></div>  
+        </div>  
+    </div>  
+
+<script>  
+Object.defineProperty(document, 'secureContext', {  
+  get: () => true,  
+  configurable: false  
+});  
+
+window.overrideIsSecureContext = true; 
+
+// const DRM_CONFIG = {
+//     systems: {
+//         'com.wiseplay.drm': {
+//             serverURL: 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1',
+//         },
+//     },
+//     priority: ['com.wiseplay.drm']
+// };
+
+const DRM_CONFIG = {
+    servers: {
+        'com.wiseplay.drm': 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1'
+    },
+    priority: ['com.wiseplay.drm']
+};
+
+let activeMediaKeys = null;  
+let activeSessions = new Set();  
+
+async function initDRM() {  
+    const videoElement = document.getElementById('encryptedVideo');  
+    
+    const supportedTypes = [  
+        'com.wiseplay.drm'  
+    ];  
+    
+    const config = [{  
+        initDataTypes: ['cenc'],  
+        videoCapabilities: [{  
+            contentType: 'video/mp4; codecs="avc1.42E01E"'  
+        }]  
+    }];  
+
+    try {  
+        const access = await navigator.requestMediaKeySystemAccess(supportedTypes[0], config);  
+        const mediaKeys = await access.createMediaKeys();  
+        
+        await videoElement.setMediaKeys(mediaKeys);  
+        activeMediaKeys = mediaKeys;  
+        updateStatus('Init DRM success', 'success');  
+        
+        videoElement.addEventListener('encrypted', handleEncryptedEvent);  
+    } catch (error) {  
+        updateStatus(`Init DRM failed: ${error.message}`, 'error');  
+    }  
+}  
+
+async function handleEncryptedEvent(event) {  
+    console.log('handleEncryptedEvent: ' + event.message);
+    const session = activeMediaKeys.createSession();  
+    activeSessions.add(session);  
+    
+    session.addEventListener('message', async (msgEvent) => {  
+        try {  
+            const license = await fetchLicense(msgEvent.message);  
+            await session.update(license);  
+            updateStatus('Lisence update success', 'success');  
+        } catch (error) {  
+            updateStatus(`Lisence update failed: ${error.message}`, 'error');  
+        }  
+    });  
+
+    const initData = event.initData;  
+    await session.generateRequest(event.initDataType, initData);  
+}  
+
+function loadEncryptedStream() {  
+    const videoElement = document.getElementById('encryptedVideo');
+    const player = dashjs.MediaPlayer().create();
+
+    player.updateSettings({
+        streaming: {
+            drm: DRM_CONFIG
+        }
+    });
+
+    player.setProtectionData({
+        "com.wiseplay.drm": {
+            serverURL: "http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1",
+            httpRequestHeaders: {
+                'Content-Type': 'application/octet-stream'
+
+            },
+            withCredentials: false,
+            initDataTypes: ['cenc']
+        }
+    });
+
+
+    player.initialize(videoElement, 'resources/dash-hw-wiseplay.mpd', true);
+    // player.initialize(videoElement, 'resources/dash-widevine.mpd', true);
+    // player.initialize(videoElement, 'resources/dash720/dash.mpd', true);
+}
+
+async function fetchLicense(licenseRequest) {  
+    const systemConfig = DRM_CONFIG.systems[Object.keys(DRM_CONFIG.systems)[0]];  
+    
+    const response = await fetch(systemConfig.serverURL, {  
+        method: 'POST',  
+        headers: {  
+            'Content-Type': 'application/octet-stream',  
+            ...systemConfig.headers  
+        },  
+        body: licenseRequest  
+    });  
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);  
+    return await response.arrayBuffer();  
+}  
+
+function releaseSession() {  
+    activeSessions.forEach(session => session.close());  
+    activeSessions.clear();  
+    updateStatus('DRM released', 'warning');  
+}  
+
+function updateStatus(message, type = 'info') {  
+    const statusDiv = document.getElementById('drmStatus');  
+    statusDiv.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;  
+    statusDiv.className = `mt-4 p-3 rounded ${  
+        type === 'error' ? 'bg-red-100 text-red-700' :  
+        type === 'success' ? 'bg-green-100 text-green-700' :  
+        'bg-yellow-100 text-yellow-700'  
+    }`;  
+}  
+</script>  
+
+<style>  
+.btn-drm-init {  
+    @apply px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors;  
+}  
+.btn-drm-load {  
+    @apply px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors;  
+}  
+.btn-drm-release {  
+    @apply px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors;  
+}  
+</style>  
+</body>  
+</html>  
