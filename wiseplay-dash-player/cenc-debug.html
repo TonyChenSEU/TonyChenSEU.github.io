@@ -43,8 +43,6 @@
 
         // 创建Shaka Player实例
         const player = new shaka.Player(video);
-        const shakaLogger = new shaka.log();
-        shakaLogger.setLevel(shaka.log.Level.INFO);
 
         // 配置DRM
         player.configure({
