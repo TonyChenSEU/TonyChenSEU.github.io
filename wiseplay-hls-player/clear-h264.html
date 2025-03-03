@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <title>Shaka Player WisePlay 示例</title>
     <!-- 引入Shaka Player编译库 -->
-<!--    <script src="../dist/shaka-player.compiled.js"></script>-->
-    <script src="../dist/shaka-player.compiled.debug.js"></script>
-
+    <script src="../dist/shaka-player.compiled.js"></script>
     <style>
         #videoContainer {
             width: 800px;
@@ -20,15 +18,17 @@
 </head>
 <body>
 <div id="videoContainer">
-    <h1>WisePlay HLS sm4s 加密流</h1>
+    <h1>WisePlay HLS 清流</h1>
     <video id="video" autoplay controls crossorigin="anonymous"></video>
 </div>
 
 <script>
     // 初始化播放器（需在用户交互后触发）
     function initPlayer() {
-        const manifestUri = 'https://hwposter-inland.hwcloudtest.cn/rem/DTA/20240117/h264-sm4s-hls/ChinaDRMLab_Promo_210525-264-30-1080P-10000K/sm4s.m3u8'; // HLS sm4s（加密方式SAMPLE-SM4） 加密流地址
-        const licenseServer = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense'; // HLS License服务器地址
+        const manifestUri = 'https://hwposter-inland.hwcloudtest.cn/rem/DTA/ChinaDRMLab-264-30-1080P-10000K-Clear/index.m3u8'; // HLS清流地址
+        // dash加密流
+        const licenseServer = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1'; // DASH License服务器地址
+        // const licenseServer = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense'; // HLS License服务器地址
 
         // 获取视频元素
         const video = document.getElementById('video');
