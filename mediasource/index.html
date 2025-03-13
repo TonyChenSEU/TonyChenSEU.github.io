@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>浏览器MediaSource TS兼容性检测</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .result-box {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .supported {
+            background: #dff0d8;
+            border: 1px solid #d6e9c6;
+        }
+        .unsupported {
+            background: #f2dede;
+            border: 1px solid #ebccd1;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 5px;
+        }
+    </style>
+</head>
+<body>
+<h2>MediaSource TS格式兼容性检测</h2>
+
+<div id="resultContainer">
+    <p>正在检测浏览器兼容性...</p>
+</div>
+
+<script>
+    function checkCompatibility() {
+        const resultContainer = document.getElementById('resultContainer');
+
+        // 1. 检测基础MediaSource支持
+        if (!('MediaSource' in window)) {
+            showResult('当前浏览器不支持MediaSource API', false);
+            return;
+        }
+
+        // 2. 检测TS格式支持
+        const mediaSource = new MediaSource();
+        const tsMimeType = 'video/mp2t; codecs="avc1.42E01E, mp4a.40.2"';
+
+        try {
+            // 3. 验证MIME类型支持
+            if (MediaSource.isTypeSupported(tsMimeType)) {
+                showResult(`✅ 支持直接追加.ts文件 (${tsMimeType})`, true);
+            } else {
+                // 4. 检测是否需要转封装为fMP4
+                const fmp4MimeType = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
+                if (MediaSource.isTypeSupported(fmp4MimeType)) {
+                    showResult('⚠️ 需将TS转封装为fMP4格式后才能追加', true);
+                } else {
+                    showResult('❌ 不支持TS格式且无替代方案', false);
+                }
+            }
+        } catch (e) {
+            showResult(`检测过程中发生错误: ${e.message}`, false);
+        }
+    }
+
+    function showResult(message, isSupported) {
+        const resultContainer = document.getElementById('resultContainer');
+        const statusClass = isSupported ? 'supported' : 'unsupported';
+
+        resultContainer.innerHTML = `
+                <div class="result-box ${statusClass}">
+                    <h3>检测结果</h3>
+                    <p>${message}</p>
+                    ${!isSupported ? '<p>推荐使用最新版Chrome/Firefox/Edge浏览器</p>' : ''}
+                </div>
+            `;
+    }
+
+    // 初始化检测
+    window.onload = checkCompatibility;
+</script>
+</body>
+</html>
