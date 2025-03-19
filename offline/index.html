@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- Shaka Player compiled library: -->
+    <script src="../dist/shaka-player.compiled.debug.js"></script>
+    <!-- Your application source: -->
+    <script src="myapp.js"  charset="UTF-8"></script>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<div id='online-signal' style='width:640px;text-align:center'></div>
+<div>
+    <div>
+        <span style="width:120px;display:inline-block">Asset Name</span>
+        <input id="asset-title-input" type="text" style="width:500px" value="WisePlay Dash cenc 加密流">
+    </div>
+    <div>
+        <span style="width:120px;display:inline-block">Asset Manifest</span>
+        <input id="asset-uri-input" type="text" style="width:500px" value="https://hwposter-inland.hwcloudtest.cn/rem/ruanjie/h265_480x270_0.2m_30fp_cenc/dash.mpd">
+    </div>
+</div>
+
+<div>
+    <span><progress id="progress-bar" value="0" max="100"></span>
+    <span><button id="download-button">Download</button></span>
+</div>
+
+<video id="video"
+       width="640"
+       controls autoplay></video>
+
+<table id="content-table" style="width:640px"></table>
+</body>
+</html>
