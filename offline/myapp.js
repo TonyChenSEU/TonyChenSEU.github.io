@@ -26,6 +26,9 @@ async function initPlayer() {
     const player = new shaka.Player();
 
     const manifest2 = 'https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=h004146chft';
+    const drmServer = 'https://wiseplay-prv.cloud.huawei.com/provision/v1/wiseplay';
+    const licenseUrl = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense';
+    const arkweburl = 'https://donglym.github.io/wiseplay_video_list.html';
     // const licenseServer = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1'; // DASH License服务器地址
 
     // 配置DRM
