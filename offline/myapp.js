@@ -29,6 +29,8 @@ async function initPlayer() {
     const drmServer = 'https://wiseplay-prv.cloud.huawei.com/provision/v1/wiseplay';
     const licenseUrl = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense';
     const arkweburl = 'https://donglym.github.io/wiseplay_video_list.html';
+    const testProvisionUrl = 'https://lfvideocbg-content.hwcloudtest.cn:28445/provision/v1/wiseplay';
+    const provisionUrl = 'https://wiseplay-prv.cloud.huawei.com/provision/v1/wiseplay';
     // const licenseServer = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=34Z29nq6eW9j4eu&useDrmProxy=1'; // DASH License服务器地址
 
     // 配置DRM
