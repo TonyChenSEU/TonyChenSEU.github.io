@@ -4,11 +4,11 @@
   <Period id="0">
     <AdaptationSet id="0" contentType="video" width="480" height="270" frameRate="15360/512" segmentAlignment="true" par="16:9">
       <ContentProtection value="cenc" schemeIdUri="urn:mpeg:dash:mp4protection:2011" cenc:default_KID="afec61fb-420d-bba0-fc16-1d6b570c26a1"/>
-      <ContentProtection schemeIdUri="urn:uuid:3d5e6d35-9b9a-41e8-b843-dd3c6e72c42c">
-        <cenc:pssh>AAAA/XBzc2gAAAAAPV5tNZuaQei4Q908bnLELAAAAN17InZlcnNpb24iOiJWMS4wIiwiY29udGVudElEIjoiTXpSYU1qbHVjVFpsVnpscU5HVjEiLCJraWRzIjpbIk1qVXdabU5sWW1Wa01UZ3lNbVkwTkdJMFlUYzVZV0ZqTURoaVlUQmhPVGM9IiwiWVdabFl6WXhabUkwTWpCa1ltSmhNR1pqTVRZeFpEWmlOVGN3WXpJMllURT0iLCJOMkUwWXpZek4ySTFPREV5WW1WbFltWmtZV0V4WlRnMk1qa3pabVJrWWpFPSJdLCJlbnNjaGVtYSI6ImNlbmMifQ==</cenc:pssh>
-      </ContentProtection>
       <ContentProtection schemeIdUri="urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed">
         <cenc:pssh xmlns:cenc="urn:mpeg:cenc:2013">AAAAW3Bzc2gAAAAA7e+LqXnWSs6jyCfc1R0h7QAAADsIARIQ62dqu8s0Xpa7z2FmMPGj2hoNd2lkZXZpbmVfdGVzdCIQZmtqM2xqYVNkZmFsa3IzaioCSEQyAA==</cenc:pssh>
+      </ContentProtection>
+      <ContentProtection schemeIdUri="urn:uuid:3d5e6d35-9b9a-41e8-b843-dd3c6e72c42c">
+        <cenc:pssh>AAAA/XBzc2gAAAAAPV5tNZuaQei4Q908bnLELAAAAN17InZlcnNpb24iOiJWMS4wIiwiY29udGVudElEIjoiTXpSYU1qbHVjVFpsVnpscU5HVjEiLCJraWRzIjpbIk1qVXdabU5sWW1Wa01UZ3lNbVkwTkdJMFlUYzVZV0ZqTURoaVlUQmhPVGM9IiwiWVdabFl6WXhabUkwTWpCa1ltSmhNR1pqTVRZeFpEWmlOVGN3WXpJMllURT0iLCJOMkUwWXpZek4ySTFPREV5WW1WbFltWmtZV0V4WlRnMk1qa3pabVJrWWpFPSJdLCJlbnNjaGVtYSI6ImNlbmMifQ==</cenc:pssh>
       </ContentProtection>
       <ContentProtection schemeIdUri="urn:uuid:1077efec-c0b2-4d02-ace3-3c1e52e2fb4b">
         <cenc:pssh>AAAAVHBzc2gBAAAAEHfv7MCyTQKs4zweUuL7SwAAAAN6TGN7WBK+6/2qHoYpP92xr+xh+0INu6D8Fh1rVwwmoSUPzr7Rgi9EtKearAi6CpcAAAAA</cenc:pssh>
