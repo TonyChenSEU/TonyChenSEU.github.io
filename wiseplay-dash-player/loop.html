@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>视频循环播放测试器</title>
+    <script>
+        // 初始化统计计数器（使用 localStorage 持久化）
+        let stats = JSON.parse(localStorage.getItem('videoStats')) || {
+            totalAttempts: 0,
+            successPlays: 0,
+            failedAttempts: 0
+        };
+
+        // 自动重置机制（24小时）
+        const startTime = Date.now();
+        const testDuration = 24 * 60 * 60 * 1000; // 24小时毫秒数
+
+        var endEventAdded = false;
+        var errorEventAdded = false;
+
+        function init() {
+            stats.totalAttempts=0;
+            stats.successPlays=0;
+            stats.failedAttempts=0;
+            loadVideo();
+            setInterval(checkStatus, 5000); // 每秒检测播放状态
+            updateDisplay();
+        }
+
+        function loadVideo() {
+            stats.totalAttempts++;
+            const iframe = document.createElement('iframe');
+            iframe.src = "http://localhost:8888/wiseplay-dash-player/cenc-both.html";
+            // iframe.src = "https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=n0036n6avkt";
+            iframe.id = "videoFrame";
+            iframe.style="width: 600px; height: 400px;";
+            document.body.innerHTML = '';
+            document.body.appendChild(iframe);
+            if (!document.getElementById('stats')) {
+                const statsDiv = document.createElement('div');
+                statsDiv.id = 'stats';
+
+                // 创建完整 HTML 结构
+                statsDiv.innerHTML = `
+                                      总尝试次数：<span id="total">0</span> |
+                                      成功次数：<span id="success">0</span> |
+                                      失败次数：<span id="fail">0</span>
+                                    `;
+
+                // 插入到页面合适位置（这里示例放在 body 开头）
+                document.body.insertBefore(statsDiv, document.body.firstChild);
+
+            }
+            endEventAdded = false;
+            errorEventAdded = false;
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('total').textContent = stats.totalAttempts;
+            document.getElementById('success').textContent = stats.successPlays;
+            document.getElementById('fail').textContent = stats.failedAttempts;
+        }
+
+        function checkStatus() {
+            // 检测是否达到24小时
+            if (Date.now() - startTime >= testDuration) {
+                alert("测试完成！");
+                localStorage.removeItem('videoStats');
+                return;
+            }
+
+            // 通过 try-catch 绕过跨域限制（有限检测）
+            try {
+                const video = document.getElementById('videoFrame').contentWindow.document.querySelector('video');
+                if (video) {
+                    if(!endEventAdded) {
+                        video.addEventListener('ended', () => {
+                            stats.successPlays++;
+                            localStorage.setItem('videoStats', JSON.stringify(stats));
+                            updateDisplay();
+                            loadVideo(); // 重新加载实现循环
+                            console.log('播放成功++');
+                        });
+                        endEventAdded = true;
+                    }
+                    if(!errorEventAdded) {
+                        video.addEventListener('error', () => {
+                            stats.failedAttempts++;
+                            localStorage.setItem('videoStats', JSON.stringify(stats));
+                            updateDisplay();
+                            loadVideo();
+                            console.log('播放失败++');
+                        });
+                        errorEventAdded = true;
+                    }
+                }
+            } catch (e) {
+                // 跨域无法直接访问时的替代方案：定时强制刷新
+                setTimeout(loadVideo, 1000*60*60); // 假设视频时长为1小时
+                console.log('超时++');
+            }
+        }
+    </script>
+</head>
+<body onload="init()">
+    <div id="stats">
+        总尝试次数：<span id="total">0</span> |
+        成功次数：<span id="success">0</span> |
+        失败次数：<span id="fail">0</span>
+    </div>
+
+</body>
+</html>

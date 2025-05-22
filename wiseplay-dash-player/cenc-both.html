@@ -11,7 +11,7 @@
 <!--    <script src="../dist/shaka-player.compiled.debug.js"></script>-->
     <style>
         #videoContainer {
-            width: 800px;
+            width: 400px;
             margin: 20px auto;
         }
         #video {
@@ -78,15 +78,17 @@
 
     // 用户交互后初始化（浏览器安全要求）
     document.addEventListener('DOMContentLoaded', () => {
-        const initButton = document.createElement('button');
-        initButton.textContent = '点击初始化播放器';
-        initButton.style.display = 'block';
-        initButton.style.margin = '20px auto';
-        initButton.onclick = () => {
-            initPlayer();
-            initButton.remove();
-        };
-        document.body.appendChild(initButton);
+        // const initButton = document.createElement('button');
+        // initButton.textContent = '点击初始化播放器';
+        // initButton.style.display = 'block';
+        // initButton.style.margin = '20px auto';
+        // initButton.onclick = () => {
+        //     initPlayer();
+        //     initButton.remove();
+        // };
+        // document.body.appendChild(initButton);
+        initPlayer();
+        // initButton.remove();
     });
 </script>
 </body>
