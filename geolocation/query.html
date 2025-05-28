@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主动式地理定位查询</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .geo-panel { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .log-entry { padding: 10px; margin: 5px 0; background: white; border-left: 4px solid #28a745; }
+        button { padding: 8px 16px; margin: 5px; cursor: pointer; }
+        .timestamp { color: #6c757d; font-size: 0.85em; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>主动式地理定位查询系统</h2>
+    <button onclick="startPolling()">开始轮询</button>
+    <button onclick="stopPolling()">停止轮询</button>
+    <select id="interval" onchange="updateInterval()">
+        <option value="3">3秒</option>
+        <option value="5" selected>5秒</option>
+        <option value="10">10秒</option>
+    </select>
+
+    <div class="geo-panel">
+        <h3>当前定位数据</h3>
+        <div>纬度: <span id="lat">--</span></div>
+        <div>经度: <span id="lng">--</span></div>
+        <div>精度: <span id="acc">--</span> 米</div>
+        <div>最后更新时间: <span id="time">--</span></div>
+    </div>
+
+    <div class="geo-panel">
+        <h3>查询日志 <span id="counter">(0次)</span></h3>
+        <div id="logContainer"></div>
+    </div>
+</div>
+
+<script>
+    let timerId = null;
+    let queryCount = 0;
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+
+    function createLogEntry(position, error) {
+        const date = new Date();
+        return `
+        <div class="log-entry" style="${error ? 'border-color:#dc3545;' : ''}">
+            <div class="timestamp">${date.toLocaleString()}</div>
+            ${error ?
+            `<div>错误: ${error}</div>` :
+            `<div>纬度: ${position.coords.latitude.toFixed(6)}</div>
+                 <div>经度: ${position.coords.longitude.toFixed(6)}</div>
+                 <div>精度: ${position.coords.accuracy.toFixed(1)}米</div>`}
+        </div>
+    `;
+    }
+
+    function updateDisplay(position) {
+        document.getElementById('lat').textContent = position.coords.latitude.toFixed(6);
+        document.getElementById('lng').textContent = position.coords.longitude.toFixed(6);
+        document.getElementById('acc').textContent = position.coords.accuracy.toFixed(1);
+        document.getElementById('time').textContent = new Date(position.timestamp).toLocaleString();
+    }
+
+    function handleQuery() {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                updateDisplay(position);
+                document.getElementById('logContainer').insertAdjacentHTML('afterbegin',
+                    createLogEntry(position));
+                queryCount++;
+                document.getElementById('counter').textContent = `(${queryCount}次)`;
+            },
+            error => {
+                const errorMsg = getErrorMessage(error);
+                document.getElementById('logContainer').insertAdjacentHTML('afterbegin',
+                    createLogEntry(null, errorMsg));
+                queryCount++;
+                document.getElementById('counter').textContent = `(${queryCount}次)`;
+            },
+            options
+        );
+    }
+
+    function getErrorMessage(error) {
+        switch(error.code) {
+            case 1: return "用户拒绝位置权限[3,5](@ref)";
+            case 2: return "位置信息不可用[7](@ref)";
+            case 3: return "请求超时[4](@ref)";
+            default: return "未知错误";
+        }
+    }
+
+    function startPolling() {
+        if (!timerId) {
+            const interval = parseInt(document.getElementById('interval').value) * 1000;
+            timerId = setInterval(handleQuery, interval);
+            handleQuery(); // 立即执行首次查询
+        }
+    }
+
+    function stopPolling() {
+        clearInterval(timerId);
+        timerId = null;
+    }
+
+    function updateInterval() {
+        if (timerId) {
+            stopPolling();
+            startPolling();
+        }
+    }
+</script>
+</body>
+</html>
