@@ -23,9 +23,11 @@
             stats.successPlays=0;
             stats.failedAttempts=0;
             loadVideo();
-            setInterval(checkStatus, 5000); // 每秒检测播放状态
+            setInterval(checkStatus, 5*1000); // 每5秒检测播放状态
             updateDisplay();
         }
+
+
 
         function loadVideo() {
             stats.totalAttempts++;
@@ -75,29 +77,29 @@
                 const video = document.getElementById('videoFrame').contentWindow.document.querySelector('video');
                 if (video) {
                     if(!endEventAdded) {
-                        video.addEventListener('ended', () => {
+                        video.addEventListener('ended', (e) => {
                             stats.successPlays++;
                             localStorage.setItem('videoStats', JSON.stringify(stats));
                             updateDisplay();
-                            loadVideo(); // 重新加载实现循环
-                            console.log('播放成功++');
+                            console.log('播放成功++ ', e);
+                            setTimeout(loadVideo, 5*1000);
                         });
                         endEventAdded = true;
                     }
                     if(!errorEventAdded) {
-                        video.addEventListener('error', () => {
+                        video.addEventListener('error', (e) => {
                             stats.failedAttempts++;
                             localStorage.setItem('videoStats', JSON.stringify(stats));
                             updateDisplay();
-                            loadVideo();
-                            console.log('播放失败++');
+                            console.log('播放失败++ ',e);
+                            setTimeout(loadVideo, 5*1000);
                         });
                         errorEventAdded = true;
                     }
                 }
             } catch (e) {
                 // 跨域无法直接访问时的替代方案：定时强制刷新
-                setTimeout(loadVideo, 1000*60*60); // 假设视频时长为1小时
+                setTimeout(loadVideo, 1000*60*5); // 假设视频时长为5min以内
                 console.log('超时++');
             }
         }

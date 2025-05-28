@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地理位置日志追踪</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .geo-log {
+            background: #f8f9fa;
+            padding: 10px;
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            /*max-height: 400px;*/
+            overflow-y: auto;
+        }
+        .log-entry {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-left: 4px solid #0d6efd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .timestamp { color: #6c757d; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>实时地理位置追踪日志</h2>
+    <button onclick="startTracking()">开始追踪</button>
+    <button onclick="stopTracking()">停止追踪</button>
+
+    <!-- 新增日志容器 -->
+    <div class="geo-log" id="geoLog"></div>
+
+    <div id="error" class="error"></div>
+</div>
+
+<script>
+    let watchId = null;
+    const logContainer = document.getElementById('geoLog');
+
+    // 创建日志条目模板
+    function createLogEntry(position) {
+        const coords = position.coords;
+        const date = new Date(position.timestamp);
+
+        return `
+                <div class="log-entry">
+                    <div class="timestamp">${date.toLocaleString()}</div>
+                    <div>纬度: ${coords.latitude.toFixed(6)}</div>
+                    <div>经度: ${coords.longitude.toFixed(6)}</div>
+                    <div>精度: ${coords.accuracy?.toFixed(1) || '--'} 米</div>
+                    ${coords.altitude ? `<div>海拔: ${coords.altitude.toFixed(1)} 米</div>` : ''}
+                    ${coords.heading ? `<div>方向: ${coords.heading.toFixed(1)}°</div>` : ''}
+                    <div>速度: ${(coords.speed || 0).toFixed(1)} 米/秒</div>
+                </div>
+            `;
+    }
+
+    function startTracking() {
+        if (navigator.geolocation) {
+            watchId = navigator.geolocation.watchPosition(
+                position => {
+                    // 插入最新日志到顶部
+                    logContainer.insertAdjacentHTML('afterbegin', createLogEntry(position));
+                    document.getElementById('error').textContent = '';
+                },
+                handleError,
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 30000,
+                    timeout: 27000
+                }
+            );
+        } else {
+            handleError({ code: 0, message: "浏览器不支持地理定位" });
+        }
+    }
+
+    function handleError(error) {
+        const errorMsg = document.getElementById('error');
+        const errorEntry = `
+                <div class="log-entry" style="border-color:#dc3545;">
+                    <div class="timestamp">${new Date().toLocaleString()}</div>
+                    <div>错误: ${getErrorMessage(error)}</div>
+                </div>
+            `;
+        logContainer.insertAdjacentHTML('afterbegin', errorEntry);
+        errorMsg.textContent = getErrorMessage(error);
+    }
+
+    function getErrorMessage(error) {
+        switch(error.code) {
+            case 1: return "用户拒绝位置访问权限";
+            case 2: return "无法获取当前位置信息";
+            case 3: return "获取位置超时，请检查网络/GPS信号";
+            default: return "未知错误：" + error.message;
+        }
+    }
+
+    function stopTracking() {
+        if (watchId !== null) {
+            navigator.geolocation.clearWatch(watchId);
+            watchId = null;
+            document.getElementById('error').textContent = "已停止位置追踪";
+        }
+    }
+</script>
+</body>
+</html>
