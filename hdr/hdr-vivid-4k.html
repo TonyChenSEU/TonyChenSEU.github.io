@@ -22,21 +22,17 @@
 </head>
 <body>
 <div id="videoContainer">
-    <h1>WisePlay Dash cenc 音视频加密流</h1>
+    <h1>HDR Vivid 4k 测试流</h1>
     <video id="video" autoplay controls crossorigin="anonymous"></video>
 </div>
 
 <script>
     // 初始化播放器（需在用户交互后触发）
     function initPlayer() {
-        // const manifestUri = 'https://hwposter-inland.hwcloudtest.cn/rem/DTA/20240117/h264-sm4c-hls/ChinaDRMLab_Promo_210525-264-30-480P-2000K/sm4c.m3u8'; // HLS sm4c(加密方式SM4-CBC) 加密流地址
-        // const manifestUri = 'https://hwposter-inland.hwcloudtest.cn/rem/DTA/20240117/h264-sm4c-hls/ChinaDRMLab_Promo_210525-264-30-480P-2000K/sm4c.m3u8'; // HLS sm4s（加密方式SAMPLE-SM4） 加密流地址
-        // const manifestUri = 'https://hwposter-inland.hwcloudtest.cn/rem/DTA/ChinaDRMLab-265-30-1080P-8400K-Clear/index.m3u8'; // HLS清流地址
-        // const manifestUri = 'https://hwposter-inland.hwcloudtest.cn/rem/LaunchEvent/DASH_MP4_H265_clear/dash.mpd'; // dash清流
-        const manifestUri = 'https://hwposter-inland.hwcloudtest.cn/rem/LaunchEvent/Audio_and_video_encryption/dash.mpd';
+
+        const manifestUri = 'https://hwposter-inland.hwcloudtest.cn/rem/LaunchEvent/HDR_Vivid/HDR_Vivid_H265_Main10_L5.1_Main_25.0Mbps_3840x2160_60.000fps_10bit_BT.2020_CUVA_HDR_Type5/dash.mpd';
         // dash加密流
-        const licenseServer = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=sfasRuanJieFSJA&useDrmProxy=1'; // DASH License服务器地址
-        // const licenseServer = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense'; // HLS License服务器地址
+        const licenseServer = 'http://license.dev.trustdta.com:8080/drmproxy/v3/getLicense?contentId=vHbjsmneEHDwWV8'; // DASH License服务器地址
 
         // 获取视频元素
         const video = document.getElementById('video');

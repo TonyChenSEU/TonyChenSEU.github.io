@@ -78,17 +78,15 @@
 
     // 用户交互后初始化（浏览器安全要求）
     document.addEventListener('DOMContentLoaded', () => {
-        // const initButton = document.createElement('button');
-        // initButton.textContent = '点击初始化播放器';
-        // initButton.style.display = 'block';
-        // initButton.style.margin = '20px auto';
-        // initButton.onclick = () => {
-        //     initPlayer();
-        //     initButton.remove();
-        // };
-        // document.body.appendChild(initButton);
-        initPlayer();
-        // initButton.remove();
+        const initButton = document.createElement('button');
+        initButton.textContent = '点击初始化播放器';
+        initButton.style.display = 'block';
+        initButton.style.margin = '20px auto';
+        initButton.onclick = () => {
+            initPlayer();
+            initButton.remove();
+        };
+        document.body.appendChild(initButton);
     });
 </script>
 </body>
