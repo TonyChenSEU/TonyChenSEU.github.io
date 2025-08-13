@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <title>测试demo导航</title>
@@ -12,20 +13,24 @@
             padding: 20px;
             background: #f8f9fa;
         }
+
         .nav-list {
             list-style: none;
             padding-left: 0;
         }
+
         .nav-item {
             margin: 10px 0;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
+
         .parent-menu {
             transition: background 0.3s;
         }
+
         .menu-header {
             display: flex;
             align-items: center;
@@ -34,41 +39,57 @@
             background: #2c3e50;
             color: white;
         }
+
         .arrow {
             margin-right: 12px;
             transition: transform 0.3s;
         }
+
         .submenu {
             display: none;
             padding: 8px 0;
             background: #f8f9fa;
         }
+
         .submenu .nav-item {
             margin: 4px 0;
             background: none;
             box-shadow: none;
         }
+
         .submenu a {
             padding: 12px 35px;
             color: #4a5568;
             font-size: 14px;
             transition: all 0.2s;
         }
+
         .submenu a:hover {
             background: #edf2f7;
             padding-left: 40px;
         }
+
         .parent-menu.active .arrow {
             transform: rotate(90deg);
         }
+
         .parent-menu.active .submenu {
             display: block;
             animation: slideDown 0.3s ease;
         }
+
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         h1 {
             color: #2c3e50;
             border-bottom: 2px solid #e2e8f0;
@@ -77,125 +98,117 @@
         }
     </style>
 </head>
+
 <body>
-<h1>测试demo导航</h1>
+    <h1>测试demo导航</h1>
 
-<ul class="nav-list">
-    <!-- 媒体菜单 -->
-    <li class="nav-item parent-menu">
-        <div class="menu-header" role="button" aria-expanded="false">
-            <span class="arrow">▶</span>
-            <span>媒体</span>
-        </div>
-        <ul class="submenu" aria-label="媒体子菜单">
-            <li class="nav-item">
-                <a href="/hdr/hdr-vivid-1080p.html">HDR Vivid 1080p 测试流</a>
-            </li>
-            <li class="nav-item">
-                <a href="/hdr/hdr-vivid-4k.html">HDR Vivid 4k 测试流</a>
-            </li>
-            <!--    <li class="nav-item">-->
-            <!--        <a href="/wiseplay-hls-player/clear-h264.html">WISEPLAY HLS H264 清流</a>-->
-            <!--    </li>-->
-            <!--    <li class="nav-item">-->
-            <!--        <a href="/wiseplay-hls-player/clear-h265.html">WISEPLAY HLS H265 清流</a>-->
-            <!--    </li>-->
-            <!--    <li class="nav-item">-->
-            <!--        <a href="/wiseplay-hls-player/sm4c.html">WISEPLAY HLS sm4c 加密流</a>-->
-            <!--    </li>-->
-            <!--    <li class="nav-item">-->
-            <!--        <a href="/wiseplay-hls-player/sm4s.html">WISEPLAY HLS sm4s 加密流</a>-->
-            <!--    </li>-->
-
-            <li class="nav-item">
-                <!--        <a href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&&vid=h004146chft&loop=1">腾讯测试页面 h004146chft - 测试</a>-->
-                <a href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&&vid=h004146chft&loop=1">腾讯测试页面
+    <ul class="nav-list">
+        <!-- 媒体菜单 -->
+        <li class="nav-item parent-menu">
+            <div class="menu-header" role="button" aria-expanded="false">
+                <span class="arrow">▶</span>
+                <span>媒体</span>
+            </div>
+            <ul class="submenu" aria-label="媒体子菜单">
+                <li class="nav-item">
+                    <a href="/hdr/hdr-vivid-1080p.html">HDR Vivid 1080p 测试流</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/hdr/hdr-vivid-4k.html">HDR Vivid 4k 测试流</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/hdr/hdr-vivid-file.html">HDR Vivid file 测试文件</a>
+                </li>
+                <a
+                    href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&&vid=h004146chft&loop=1">腾讯测试页面
                     h004146chft - 测试</a>
-                <!--        <a href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=h004146chft">腾讯测试页面 h004146chft - 测试</a>-->
-            </li>
-            <li class="nav-item">
-                <a href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=g0033ljestj">腾讯测试页面
-                    非加密 g0033ljestj</a>
-            </li>
+        </li>
+        <li class="nav-item">
+            <a
+                href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=g0033ljestj">腾讯测试页面
+                非加密 g0033ljestj</a>
+        </li>
 
-            <!--    <li class="nav-item">-->
-            <!--        <a href="https://devcloud.cn-north-4.huaweicloud.com/cloudartifact/project/b19f5ea8ffd4492ea8c06ca2ebf3f858/private/repoView/detail">electron</a>-->
-            <!--    </li>-->
-            <li class="nav-item">
-                <a href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=n0036n6avkt&loop=1">腾讯测试页面
-                    n0036n6avkt - 测试</a>
-                <!--        <a href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=n0036n6avkt">腾讯测试页面 n0036n6avkt - 测试</a>-->
-            </li>
-            <!--    <li class="nav-item">-->
-            <!--        <a href="https://v.qq.com/thumbplayer-offline-log.html">腾讯上传日志</a>-->
-            <!--    </li>-->
+        <!--    <li class="nav-item">-->
+        <!--        <a href="https://devcloud.cn-north-4.huaweicloud.com/cloudartifact/project/b19f5ea8ffd4492ea8c06ca2ebf3f858/private/repoView/detail">electron</a>-->
+        <!--    </li>-->
+        <li class="nav-item">
+            <a
+                href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=n0036n6avkt&loop=1">腾讯测试页面
+                n0036n6avkt - 测试</a>
+            <!--        <a href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=n0036n6avkt">腾讯测试页面 n0036n6avkt - 测试</a>-->
+        </li>
+        <!--    <li class="nav-item">-->
+        <!--        <a href="https://v.qq.com/thumbplayer-offline-log.html">腾讯上传日志</a>-->
+        <!--    </li>-->
 
-            <!--    <li class="nav-item">-->
-            <!--        <a href="https://donglym.github.io/wiseplay_video_list.html">Arkweb测试页面</a>-->
-            <!--    </li>-->
-            <li class="nav-item">
-                <a href="/wiseplay-dash-player/clear.html">WISEPLAY DASH 清流</a>
-            </li>
-            <li class="nav-item">
-                <a href="/wiseplay-dash-player/cenc.html">WISEPLAY DASH cenc 加密流 - 测试</a>
-            </li>
-            <li class="nav-item">
-                <a href="/wiseplay-dash-player/cenc-4k.html">WISEPLAY DASH cenc 4K 加密流 - 测试</a>
-            </li>
+        <!--    <li class="nav-item">-->
+        <!--        <a href="https://donglym.github.io/wiseplay_video_list.html">Arkweb测试页面</a>-->
+        <!--    </li>-->
+        <li class="nav-item">
+            <a href="/wiseplay-dash-player/clear.html">WISEPLAY DASH 清流</a>
+        </li>
+        <li class="nav-item">
+            <a href="/wiseplay-dash-player/cenc.html">WISEPLAY DASH cenc 加密流 - 测试</a>
+        </li>
+        <li class="nav-item">
+            <a href="/wiseplay-dash-player/cenc-4k.html">WISEPLAY DASH cenc 4K 加密流 - 测试</a>
+        </li>
 
-            <!--    <li class="nav-item">-->
-            <!--        <a href="/offline/index.html">WISEPLAY DASH cenc  加密流 离线播放</a>-->
-            <!--    </li>-->
-            <!--    <li class="nav-item">-->
-            <!--        <a href="/wiseplay-dash-player/cbc1.html">WISEPLAY DASH CBC1 加密流</a>-->
-            <!--    </li>-->
-            <!--    <li class="nav-item">-->
-            <!--        <a href="/wiseplay-dash-player/cbcs.html">WISEPLAY DASH CBCS 加密流</a>-->
-            <!--    </li>-->
-            <!--    <li class="nav-item">-->
-            <!--        <a href="/wiseplay-dash-player/sm4c.html">WISEPLAY DASH SM4-CBC 加密流</a>-->
-            <!--    </li>-->
+        <!--    <li class="nav-item">-->
+        <!--        <a href="/offline/index.html">WISEPLAY DASH cenc  加密流 离线播放</a>-->
+        <!--    </li>-->
+        <!--    <li class="nav-item">-->
+        <!--        <a href="/wiseplay-dash-player/cbc1.html">WISEPLAY DASH CBC1 加密流</a>-->
+        <!--    </li>-->
+        <!--    <li class="nav-item">-->
+        <!--        <a href="/wiseplay-dash-player/cbcs.html">WISEPLAY DASH CBCS 加密流</a>-->
+        <!--    </li>-->
+        <!--    <li class="nav-item">-->
+        <!--        <a href="/wiseplay-dash-player/sm4c.html">WISEPLAY DASH SM4-CBC 加密流</a>-->
+        <!--    </li>-->
 
-            <li class="nav-item">
-                <a href="/wiseplay-dash-player/cenc-both.html">WISEPLAY DASH 加密音视频流 - 测试</a>
-            </li>
-            <li class="nav-item">
-                <a href="/mediasource/index.html">WISEPLAY HLS ts 支持检查</a>
-            </li>
-            <!-- <li class="nav-item">
+        <li class="nav-item">
+            <a href="/wiseplay-dash-player/cenc-both.html">WISEPLAY DASH 加密音视频流 - 测试</a>
+        </li>
+        <li class="nav-item">
+            <a href="/mediasource/index.html">WISEPLAY HLS ts 支持检查</a>
+        </li>
+        <!-- <li class="nav-item">
                 <a href="/mediasource/widevine-debug.html">WIDEVINE DASH 加密视频</a>
             </li>
             <li class="nav-item">
                 <a href="/wiseplay-dash-player/widevine-and-wiseplay-debug.html">WIDEVINE 和 WISEPLAY 加密视频</a> -->
-            <!-- </li> -->
-            <li class="nav-item">
-                <a href="/wiseplay-dash-player/loop.html">WISEPLAY DASH 加密音视频流循环播放测试</a>
-            </li>
-            <li class="nav-item">
-                <a href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=n0036n6avkt&loop=1">腾讯流循环播放测试</a>
-            </li>
-            <!--            <li class="nav-item">-->
-            <!--                <a href="https://v.qq.com/thumbplayer-offline-log.html">日志分析工具</a>-->
-            <!--            </li>-->
-            <!--            <li class="nav-item">-->
-            <!--                <a href="https://v.youku.com/video?s=ccbde39af9d441a696f9＆vid=XNjM5MTQ5NTUyMA==">youku DRM</a>-->
-            <!--            </li>-->
-            <!--            <li class="nav-item">-->
-            <!--                <a href="{"certificateChain":["MIICNzCCAd2gAwIBAgIUAQEAAAE45ldm4+DC7qHhHleTe6QwCgYIKoEcz1UBg3UwMjELMAkGA1UEBgwCQ04xDTALBgNVBAoMBENEVEExFDASBgNVBAMMC0RldmljZSBDQSAxMB4XDTI1MDMxNDA5NTM1NVoXDTQ1MDMxNDA5NTM1NVowgawxCzAJBgNVBAYMAkNOMQ8wDQYDVQQKDAZIdWF3ZWkxEzARBgNVBAsMCkh1YXdlaV9DQkcxLDAqBgNVBAMMI0hXLURSTUMtRENELUhXLUhVQVctMjAyNTAzLTAzLUhXSEFEMUkwRwYDVQQFDEA1ZDU2Nzg3ZGU3NjdjYTE3MzgzNzBjMjg5ZmNhY2JlNTJiY2QwMDYzZjkyNTA1MGE3MDkxMzQzNWQwZWUzYjY0MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEZwvAvyuQgtPdw6XQfZB5pPcQl5PqTbRqAgy4rM7qTRltCOCvMJqfUQjjvsJCNxYl4tfgMFiaOeVHkQ65L/p7daNWMFQwDgYDVR0PAQH/BAQDAgWgMCsGA1UdIwQkMCKAIJ7DWbQggKy+qSPNdBZwCP4ZqzAOgYzZfqzTDzZee7h/MBUGA1UdJQEB/wQLMAkGByqBHIbvMAgwCgYIKoEcz1UBg3UDSAAwRQIgCsmPuH9D4qXWnFtlv37pLI9ku+y10JOXq/y8P1brTd0CIQCnX9FvVQ6D6+YGpJlnmBTEaNNy540SQFGFyyHHlJ1++w==","MIIB0jCCAXigAwIBAgIEHzkbcTAKBggqgRzPVQGDdTAuMQswCQYDVQQGDAJDTjENMAsGA1UECgwEQ0RUQTEQMA4GA1UEAwwHUm9vdCBDQTAgFw0xOTA2MjMxNjAwMDBaGA8yMDY5MDYyNDE1NTk1OVowMjELMAkGA1UEBgwCQ04xDTALBgNVBAoMBENEVEExFDASBgNVBAMMC0RldmljZSBDQSAxMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAErtiVEyPkbD25lnX4pG9NCfcR+kqcSd+liHG7aLv1a84dsw2y25RTBFNL2pT9/cMc1Wtk5cgKsu4738quwg43q6N+MHwwKQYDVR0OBCIEIJ7DWbQggKy+qSPNdBZwCP4ZqzAOgYzZfqzTDzZee7h/MA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEAMCsGA1UdIwQkMCKAINwDpbg43aGp7tfuxs8HFukRwsav9Apfxg0sUXZ/2usuMAoGCCqBHM9VAYN1A0gAMEUCIHSUz2ovauPAgKb+NL6cTS0QtmrWgiReVtsgEgT2yd6cAiEA4/OBodnpilXpQVJGic+NDZqaoRTlrlHodTffwKWkR+I="],"nonce":"5M7XCoa1P/mQFLy5ku1xyQ==","type":"licenseRequest","version":"2.0","requestTime":"1748396180","deviceID":"XVZ4fednyhc4Nwwon8rL5SvNAGP5JQUKcJE0NdDuO2Q=","supportedAlgorithms":["KMSProfile1"],"contentIDs":["AAAAm3Bzc2gBAAAAPV5tNZuaQei4Q908bnLELAAAAAEbursOcWnkcuSydQQ8LttDAAAAZ3siY29udGVudElEIjoiZWpBd016WmxjWGhzZDNZPSIsImtpZHMiOlsiRzdxN0RuRnA1SExrc25VRVBDN2JRdz09Il0sImVuc2NoZW1hIjoiY2VuYyIsInZlcnNpb24iOiJWMS4wIn0="],"extensions":{"authenticationData":"eyJkZXZpY2VNb2RlbCI6IkhBRC1XMzIiLCJvc1ZlcnNpb24iOiJPcGVuSGFybW9ueS01LjAuNS4zMTYiLCJkcm1DbGllbnRWZXJzaW9uIjoiT1BLSHcxLjAiLCJ0YVZlcnNpb24iOiJjZHJtdGExLjAuMSJ9"},"signature":"3z1EADTVyEb9zJ0r4TubryTQWMyvITy2hX0fe7/5FlJiN9rXz+TDRmIArrzeKUYsiGA5grI13I4N/k45ka5P+Q=="}"> license fail 9:36</a>-->
-            <!--            </li>-->
-            <!--            <li class="nav-item">-->
-            <!--                <a href="{"certificateChain":["MIICNzCCAd2gAwIBAgIUAQEAAAE45ldm4+DC7qHhHleTe6QwCgYIKoEcz1UBg3UwMjELMAkGA1UEBgwCQ04xDTALBgNVBAoMBENEVEExFDASBgNVBAMMC0RldmljZSBDQSAxMB4XDTI1MDMxNDA5NTM1NVoXDTQ1MDMxNDA5NTM1NVowgawxCzAJBgNVBAYMAkNOMQ8wDQYDVQQKDAZIdWF3ZWkxEzARBgNVBAsMCkh1YXdlaV9DQkcxLDAqBgNVBAMMI0hXLURSTUMtRENELUhXLUhVQVctMjAyNTAzLTAzLUhXSEFEMUkwRwYDVQQFDEA1ZDU2Nzg3ZGU3NjdjYTE3MzgzNzBjMjg5ZmNhY2JlNTJiY2QwMDYzZjkyNTA1MGE3MDkxMzQzNWQwZWUzYjY0MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEZwvAvyuQgtPdw6XQfZB5pPcQl5PqTbRqAgy4rM7qTRltCOCvMJqfUQjjvsJCNxYl4tfgMFiaOeVHkQ65L/p7daNWMFQwDgYDVR0PAQH/BAQDAgWgMCsGA1UdIwQkMCKAIJ7DWbQggKy+qSPNdBZwCP4ZqzAOgYzZfqzTDzZee7h/MBUGA1UdJQEB/wQLMAkGByqBHIbvMAgwCgYIKoEcz1UBg3UDSAAwRQIgCsmPuH9D4qXWnFtlv37pLI9ku+y10JOXq/y8P1brTd0CIQCnX9FvVQ6D6+YGpJlnmBTEaNNy540SQFGFyyHHlJ1++w==","MIIB0jCCAXigAwIBAgIEHzkbcTAKBggqgRzPVQGDdTAuMQswCQYDVQQGDAJDTjENMAsGA1UECgwEQ0RUQTEQMA4GA1UEAwwHUm9vdCBDQTAgFw0xOTA2MjMxNjAwMDBaGA8yMDY5MDYyNDE1NTk1OVowMjELMAkGA1UEBgwCQ04xDTALBgNVBAoMBENEVEExFDASBgNVBAMMC0RldmljZSBDQSAxMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAErtiVEyPkbD25lnX4pG9NCfcR+kqcSd+liHG7aLv1a84dsw2y25RTBFNL2pT9/cMc1Wtk5cgKsu4738quwg43q6N+MHwwKQYDVR0OBCIEIJ7DWbQggKy+qSPNdBZwCP4ZqzAOgYzZfqzTDzZee7h/MA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEAMCsGA1UdIwQkMCKAINwDpbg43aGp7tfuxs8HFukRwsav9Apfxg0sUXZ/2usuMAoGCCqBHM9VAYN1A0gAMEUCIHSUz2ovauPAgKb+NL6cTS0QtmrWgiReVtsgEgT2yd6cAiEA4/OBodnpilXpQVJGic+NDZqaoRTlrlHodTffwKWkR+I="],"nonce":"pfdwFQlJGV+sR+J1hKzWHg==","type":"licenseRequest","version":"2.0","requestTime":"1748397146","deviceID":"XVZ4fednyhc4Nwwon8rL5SvNAGP5JQUKcJE0NdDuO2Q=","supportedAlgorithms":["KMSProfile1"],"contentIDs":["AAAAm3Bzc2gBAAAAPV5tNZuaQei4Q908bnLELAAAAAEbursOcWnkcuSydQQ8LttDAAAAZ3siY29udGVudElEIjoiZWpBd016WmxjWGhzZDNZPSIsImtpZHMiOlsiRzdxN0RuRnA1SExrc25VRVBDN2JRdz09Il0sImVuc2NoZW1hIjoiY2VuYyIsInZlcnNpb24iOiJWMS4wIn0="],"extensions":{"authenticationData":"eyJkZXZpY2VNb2RlbCI6IkhBRC1XMzIiLCJvc1ZlcnNpb24iOiJPcGVuSGFybW9ueS01LjAuNS4zMTYiLCJkcm1DbGllbnRWZXJzaW9uIjoiT1BLSHcxLjAiLCJ0YVZlcnNpb24iOiJjZHJtdGExLjAuMSJ9"},"signature":"j82Qp21uDJ9Z9iKb/I2Giw7PZPxw4z6epl57m/B+IjGyK4IUrgpWZD3oY1sX4S6xyCDFoc4nYHM2r64ALHcEGA=="}"> license fail 9:52</a>-->
-            <!--            </li>-->
-            <li class="nav-item">
-                <a href="/wiseplay-dash-player/h264.html">MP4 avc/h264 未加密 测试</a>
-            </li>
-            <li class="nav-item">
-                <a href="/wiseplay-dash-player/h265.html">MP4 hevc/h265 未加密 - 测试</a>
-            </li>
-            <li class="nav-item">
-                <a href="https://tv.cctv.com/live/cctv3/?spm=C28340.PPLJMgtMz70J.ExidtyEJcS5K.3">cctv live - 测试</a>
-            </li>
-        </ul>
+        <!-- </li> -->
+        <li class="nav-item">
+            <a href="/wiseplay-dash-player/loop.html">WISEPLAY DASH 加密音视频流循环播放测试</a>
+        </li>
+        <li class="nav-item">
+            <a
+                href="https://zbmgr.v.qq.com/newlive/thumbplayer_live.html?&noad=1&drm=128&type=vod&__env=miropeng_0&vid=n0036n6avkt&loop=1">腾讯流循环播放测试</a>
+        </li>
+        <!--            <li class="nav-item">-->
+        <!--                <a href="https://v.qq.com/thumbplayer-offline-log.html">日志分析工具</a>-->
+        <!--            </li>-->
+        <!--            <li class="nav-item">-->
+        <!--                <a href="https://v.youku.com/video?s=ccbde39af9d441a696f9＆vid=XNjM5MTQ5NTUyMA==">youku DRM</a>-->
+        <!--            </li>-->
+        <!--            <li class="nav-item">-->
+        <!--                <a href="{"certificateChain":["MIICNzCCAd2gAwIBAgIUAQEAAAE45ldm4+DC7qHhHleTe6QwCgYIKoEcz1UBg3UwMjELMAkGA1UEBgwCQ04xDTALBgNVBAoMBENEVEExFDASBgNVBAMMC0RldmljZSBDQSAxMB4XDTI1MDMxNDA5NTM1NVoXDTQ1MDMxNDA5NTM1NVowgawxCzAJBgNVBAYMAkNOMQ8wDQYDVQQKDAZIdWF3ZWkxEzARBgNVBAsMCkh1YXdlaV9DQkcxLDAqBgNVBAMMI0hXLURSTUMtRENELUhXLUhVQVctMjAyNTAzLTAzLUhXSEFEMUkwRwYDVQQFDEA1ZDU2Nzg3ZGU3NjdjYTE3MzgzNzBjMjg5ZmNhY2JlNTJiY2QwMDYzZjkyNTA1MGE3MDkxMzQzNWQwZWUzYjY0MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEZwvAvyuQgtPdw6XQfZB5pPcQl5PqTbRqAgy4rM7qTRltCOCvMJqfUQjjvsJCNxYl4tfgMFiaOeVHkQ65L/p7daNWMFQwDgYDVR0PAQH/BAQDAgWgMCsGA1UdIwQkMCKAIJ7DWbQggKy+qSPNdBZwCP4ZqzAOgYzZfqzTDzZee7h/MBUGA1UdJQEB/wQLMAkGByqBHIbvMAgwCgYIKoEcz1UBg3UDSAAwRQIgCsmPuH9D4qXWnFtlv37pLI9ku+y10JOXq/y8P1brTd0CIQCnX9FvVQ6D6+YGpJlnmBTEaNNy540SQFGFyyHHlJ1++w==","MIIB0jCCAXigAwIBAgIEHzkbcTAKBggqgRzPVQGDdTAuMQswCQYDVQQGDAJDTjENMAsGA1UECgwEQ0RUQTEQMA4GA1UEAwwHUm9vdCBDQTAgFw0xOTA2MjMxNjAwMDBaGA8yMDY5MDYyNDE1NTk1OVowMjELMAkGA1UEBgwCQ04xDTALBgNVBAoMBENEVEExFDASBgNVBAMMC0RldmljZSBDQSAxMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAErtiVEyPkbD25lnX4pG9NCfcR+kqcSd+liHG7aLv1a84dsw2y25RTBFNL2pT9/cMc1Wtk5cgKsu4738quwg43q6N+MHwwKQYDVR0OBCIEIJ7DWbQggKy+qSPNdBZwCP4ZqzAOgYzZfqzTDzZee7h/MA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEAMCsGA1UdIwQkMCKAINwDpbg43aGp7tfuxs8HFukRwsav9Apfxg0sUXZ/2usuMAoGCCqBHM9VAYN1A0gAMEUCIHSUz2ovauPAgKb+NL6cTS0QtmrWgiReVtsgEgT2yd6cAiEA4/OBodnpilXpQVJGic+NDZqaoRTlrlHodTffwKWkR+I="],"nonce":"5M7XCoa1P/mQFLy5ku1xyQ==","type":"licenseRequest","version":"2.0","requestTime":"1748396180","deviceID":"XVZ4fednyhc4Nwwon8rL5SvNAGP5JQUKcJE0NdDuO2Q=","supportedAlgorithms":["KMSProfile1"],"contentIDs":["AAAAm3Bzc2gBAAAAPV5tNZuaQei4Q908bnLELAAAAAEbursOcWnkcuSydQQ8LttDAAAAZ3siY29udGVudElEIjoiZWpBd016WmxjWGhzZDNZPSIsImtpZHMiOlsiRzdxN0RuRnA1SExrc25VRVBDN2JRdz09Il0sImVuc2NoZW1hIjoiY2VuYyIsInZlcnNpb24iOiJWMS4wIn0="],"extensions":{"authenticationData":"eyJkZXZpY2VNb2RlbCI6IkhBRC1XMzIiLCJvc1ZlcnNpb24iOiJPcGVuSGFybW9ueS01LjAuNS4zMTYiLCJkcm1DbGllbnRWZXJzaW9uIjoiT1BLSHcxLjAiLCJ0YVZlcnNpb24iOiJjZHJtdGExLjAuMSJ9"},"signature":"3z1EADTVyEb9zJ0r4TubryTQWMyvITy2hX0fe7/5FlJiN9rXz+TDRmIArrzeKUYsiGA5grI13I4N/k45ka5P+Q=="}"> license fail 9:36</a>-->
+        <!--            </li>-->
+        <!--            <li class="nav-item">-->
+        <!--                <a href="{"certificateChain":["MIICNzCCAd2gAwIBAgIUAQEAAAE45ldm4+DC7qHhHleTe6QwCgYIKoEcz1UBg3UwMjELMAkGA1UEBgwCQ04xDTALBgNVBAoMBENEVEExFDASBgNVBAMMC0RldmljZSBDQSAxMB4XDTI1MDMxNDA5NTM1NVoXDTQ1MDMxNDA5NTM1NVowgawxCzAJBgNVBAYMAkNOMQ8wDQYDVQQKDAZIdWF3ZWkxEzARBgNVBAsMCkh1YXdlaV9DQkcxLDAqBgNVBAMMI0hXLURSTUMtRENELUhXLUhVQVctMjAyNTAzLTAzLUhXSEFEMUkwRwYDVQQFDEA1ZDU2Nzg3ZGU3NjdjYTE3MzgzNzBjMjg5ZmNhY2JlNTJiY2QwMDYzZjkyNTA1MGE3MDkxMzQzNWQwZWUzYjY0MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEZwvAvyuQgtPdw6XQfZB5pPcQl5PqTbRqAgy4rM7qTRltCOCvMJqfUQjjvsJCNxYl4tfgMFiaOeVHkQ65L/p7daNWMFQwDgYDVR0PAQH/BAQDAgWgMCsGA1UdIwQkMCKAIJ7DWbQggKy+qSPNdBZwCP4ZqzAOgYzZfqzTDzZee7h/MBUGA1UdJQEB/wQLMAkGByqBHIbvMAgwCgYIKoEcz1UBg3UDSAAwRQIgCsmPuH9D4qXWnFtlv37pLI9ku+y10JOXq/y8P1brTd0CIQCnX9FvVQ6D6+YGpJlnmBTEaNNy540SQFGFyyHHlJ1++w==","MIIB0jCCAXigAwIBAgIEHzkbcTAKBggqgRzPVQGDdTAuMQswCQYDVQQGDAJDTjENMAsGA1UECgwEQ0RUQTEQMA4GA1UEAwwHUm9vdCBDQTAgFw0xOTA2MjMxNjAwMDBaGA8yMDY5MDYyNDE1NTk1OVowMjELMAkGA1UEBgwCQ04xDTALBgNVBAoMBENEVEExFDASBgNVBAMMC0RldmljZSBDQSAxMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAErtiVEyPkbD25lnX4pG9NCfcR+kqcSd+liHG7aLv1a84dsw2y25RTBFNL2pT9/cMc1Wtk5cgKsu4738quwg43q6N+MHwwKQYDVR0OBCIEIJ7DWbQggKy+qSPNdBZwCP4ZqzAOgYzZfqzTDzZee7h/MA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEAMCsGA1UdIwQkMCKAINwDpbg43aGp7tfuxs8HFukRwsav9Apfxg0sUXZ/2usuMAoGCCqBHM9VAYN1A0gAMEUCIHSUz2ovauPAgKb+NL6cTS0QtmrWgiReVtsgEgT2yd6cAiEA4/OBodnpilXpQVJGic+NDZqaoRTlrlHodTffwKWkR+I="],"nonce":"pfdwFQlJGV+sR+J1hKzWHg==","type":"licenseRequest","version":"2.0","requestTime":"1748397146","deviceID":"XVZ4fednyhc4Nwwon8rL5SvNAGP5JQUKcJE0NdDuO2Q=","supportedAlgorithms":["KMSProfile1"],"contentIDs":["AAAAm3Bzc2gBAAAAPV5tNZuaQei4Q908bnLELAAAAAEbursOcWnkcuSydQQ8LttDAAAAZ3siY29udGVudElEIjoiZWpBd016WmxjWGhzZDNZPSIsImtpZHMiOlsiRzdxN0RuRnA1SExrc25VRVBDN2JRdz09Il0sImVuc2NoZW1hIjoiY2VuYyIsInZlcnNpb24iOiJWMS4wIn0="],"extensions":{"authenticationData":"eyJkZXZpY2VNb2RlbCI6IkhBRC1XMzIiLCJvc1ZlcnNpb24iOiJPcGVuSGFybW9ueS01LjAuNS4zMTYiLCJkcm1DbGllbnRWZXJzaW9uIjoiT1BLSHcxLjAiLCJ0YVZlcnNpb24iOiJjZHJtdGExLjAuMSJ9"},"signature":"j82Qp21uDJ9Z9iKb/I2Giw7PZPxw4z6epl57m/B+IjGyK4IUrgpWZD3oY1sX4S6xyCDFoc4nYHM2r64ALHcEGA=="}"> license fail 9:52</a>-->
+        <!--            </li>-->
+        <li class="nav-item">
+            <a href="/wiseplay-dash-player/h264.html">MP4 avc/h264 未加密 测试</a>
+        </li>
+        <li class="nav-item">
+            <a href="/wiseplay-dash-player/h265.html">MP4 hevc/h265 未加密 - 测试</a>
+        </li>
+        <li class="nav-item">
+            <a href="https://tv.cctv.com/live/cctv3/?spm=C28340.PPLJMgtMz70J.ExidtyEJcS5K.3">cctv live - 测试</a>
+        </li>
+    </ul>
     </li>
 
     <!-- 权限菜单 -->
@@ -243,35 +256,36 @@
 
         </ul>
     </li>
-</ul>
+    </ul>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const parentMenus = document.querySelectorAll('.parent-menu');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const parentMenus = document.querySelectorAll('.parent-menu');
 
-        // 菜单展开逻辑
-        parentMenus.forEach(menu => {
-            const header = menu.querySelector('.menu-header');
-            header.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const isActive = menu.classList.contains('active');
+            // 菜单展开逻辑
+            parentMenus.forEach(menu => {
+                const header = menu.querySelector('.menu-header');
+                header.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const isActive = menu.classList.contains('active');
 
-                // 切换当前菜单
-                menu.classList.toggle('active', !isActive);
-                header.setAttribute('aria-expanded', !isActive);
+                    // 切换当前菜单
+                    menu.classList.toggle('active', !isActive);
+                    header.setAttribute('aria-expanded', !isActive);
+                });
+            });
+
+            // 键盘导航支持
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    parentMenus.forEach(menu => {
+                        menu.classList.remove('active');
+                        menu.querySelector('.menu-header').setAttribute('aria-expanded', 'false');
+                    });
+                }
             });
         });
-
-        // 键盘导航支持
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                parentMenus.forEach(menu => {
-                    menu.classList.remove('active');
-                    menu.querySelector('.menu-header').setAttribute('aria-expanded', 'false');
-                });
-            }
-        });
-    });
-</script>
+    </script>
 </body>
+
 </html>
